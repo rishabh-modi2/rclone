@@ -1,23 +1,18 @@
 #!/usr/bin/env node
 // Starts the bot, handles permissions and chat context,
 // interprets commands and delegates the actual command
-// running to a Command instance. When started, an owner
-// ID should be given.
-
-var path = require("path");
-var fs = require("fs");
+// rning to a Command instance. When started, an owner
+// ID should be given.                                        
+var path = require("path");                                   var fs = require("fs");
 var botgram = require("botgram");
-var escapeHtml = require("escape-html");
-var utils = require("./lib/utils");
-var Command = require("./lib/command").Command;
-var Editor = require("./lib/editor").Editor;
+var escapeHtml = require("escape-html");                      var utils = require("./lib/utils");
+var Command = require("./lib/command").Command;               var Editor = require("./lib/editor").Editor;
 
 var CONFIG_FILE = path.join(__dirname, "config.json");
 try {
     var config = require(CONFIG_FILE);
 } catch (e) {
-    console.error("Couldn't load the configuration file, starting the wizard.\n");
-    require("./lib/wizard").configWizard({ configFile: CONFIG_FILE });
+    console.error("Couldn't load the configuration file, starting the wizard.\n");                                              require("./lib/wizard").configWizard({ configFile: CONFIG_FILE });
     return;
 }
 
@@ -98,7 +93,7 @@ bot.message(function (msg, reply, next) {
   if (msg.context.editor)
     return msg.context.editor.handleReply(msg);
   if (!msg.context.command)
-    return reply.html("No command is running.");
+    return reply.html("No command is rning.");
   msg.context.command.handleReply(msg);
 });
 
@@ -109,22 +104,22 @@ bot.edited.message(function (msg, reply, next) {
   next();
 });
 
-// Convenience command -- behaves as /run or /enter
-// depending on whether a command is already running
+// Convenience command -- behaves as /r or /etr
+// depending on whether a command is already rning
 bot.command("r", function (msg, reply, next) {
   // A little hackish, but it does show the power of
   // Botgram's fallthrough system!
-  msg.command = msg.context.command ? "enter" : "run";
+  msg.command = msg.context.command ? "etr" : "r";
   next();
 });
 
 // Signal sending
-bot.command("cancel", "kill", function (msg, reply, next) {
+bot.command("c", "kill", function (msg, reply, next) {
   var arg = msg.args(1)[0];
   if (!msg.context.command)
-    return reply.html("No command is running.");
+    return reply.html("No command is rning.");
 
-  var group = msg.command === "cancel";
+  var group = msg.command === "c";
   var signal = group ? "SIGINT" : "SIGTERM";
   if (arg) signal = arg.trim().toUpperCase();
   if (signal.substring(0,3) !== "SIG") signal = "SIG" + signal;
@@ -136,17 +131,17 @@ bot.command("cancel", "kill", function (msg, reply, next) {
 });
 
 // Input sending
-bot.command("enter", "type", function (msg, reply, next) {
+bot.command("etr", "type", function (msg, reply, next) {
   var args = msg.args();
   if (!msg.context.command)
-    return reply.html("No command is running.");
+    return reply.html("No command is rning.");
   if (msg.command === "type" && !args) args = " ";
   msg.context.command.sendInput(args, msg.command === "type");
 });
 bot.command("control", function (msg, reply, next) {
   var arg = msg.args(1)[0];
   if (!msg.context.command)
-    return reply.html("No command is running.");
+    return reply.html("No command is rning.");
   if (!arg || !/^[a-zA-Z]$/i.test(arg))
     return reply.html("Use /control &lt;letter&gt; to send Control+letter to the process.");
   var code = arg.toUpperCase().charCodeAt(0) - 0x40;
@@ -155,7 +150,7 @@ bot.command("control", function (msg, reply, next) {
 bot.command("meta", function (msg, reply, next) {
   var arg = msg.args(1)[0];
   if (!msg.context.command)
-    return reply.html("No command is running.");
+    return reply.html("No command is rning.");
   if (!arg)
     return msg.context.command.toggleMeta();
   msg.context.command.toggleMeta(true);
@@ -163,32 +158,32 @@ bot.command("meta", function (msg, reply, next) {
 });
 bot.command("end", function (msg, reply, next) {
   if (!msg.context.command)
-    return reply.html("No command is running.");
+    return reply.html("No command is rning.");
   msg.context.command.sendEof();
 });
 
 // Redraw
 bot.command("redraw", function (msg, reply, next) {
   if (!msg.context.command)
-    return reply.html("No command is running.");
+    return reply.html("No command is rning.");
   msg.context.command.redraw();
 });
 
 // Command start
-bot.command("run", function (msg, reply, next) {
+bot.command("r", function (msg, reply, next) {
   var args = msg.args();
   if (!args)
-    return reply.html("Use /run &lt;command&gt; to execute something.");
+    return reply.html("Use /r &lt;command&gt; to execute something.");
 
   if (msg.context.command) {
     var command = msg.context.command;
-    return reply.text("A command is already running.");
+    return reply.text("A command is already rning.");
   }
 
   if (msg.editor) msg.editor.detach();
   msg.editor = null;
 
-  console.log("Chat «%s»: running command «%s»", msg.chat.name, args);
+  console.log("Chat «%s»: rning command «%s»", msg.chat.name, args);
   msg.context.command = new Command(reply, msg.context, args);
   msg.context.command.on("exit", function() {
     msg.context.command = null;
@@ -203,7 +198,7 @@ bot.command("file", function (msg, reply, next) {
 
   if (msg.context.command) {
     var command = msg.context.command;
-    return reply.reply(command.initialMessage.id || msg).text("A command is running.");
+    return reply.reply(command.initialMessage.id || msg).text("A command is rning.");
   }
 
   if (msg.editor) msg.editor.detach();
@@ -220,7 +215,7 @@ bot.command("file", function (msg, reply, next) {
 // Keypad
 bot.command("keypad", function (msg, reply, next) {
   if (!msg.context.command)
-    return reply.html("No command is running.");
+    return reply.html("No command is rning.");
   try {
     msg.context.command.toggleKeypad();
   } catch (e) {
@@ -279,8 +274,8 @@ bot.command("status", function (msg, reply, next) {
 
   // Running command
   if (context.editor) content += "Editing file: " + escapeHtml(context.editor.file) + "\n\n";
-  else if (!context.command) content += "No command running.\n\n";
-  else content += "Command running, PID "+context.command.pty.pid+".\n\n";
+  else if (!context.command) content += "No command rning.\n\n";
+  else content += "Command rning, PID "+context.command.pty.pid+".\n\n";
 
   // Chat settings
   content += "Shell: " + escapeHtml(context.shell) + "\n";
@@ -314,7 +309,7 @@ bot.command("shell", function (msg, reply, next) {
   if (arg) {
     if (msg.context.command) {
       var command = msg.context.command;
-      return reply.reply(command.initialMessage.id || msg).html("Can't change the shell while a command is running.");
+      return reply.reply(command.initialMessage.id || msg).html("Can't change the shell while a command is rning.");
     }
     try {
       var shell = utils.resolveShell(arg);
@@ -342,7 +337,7 @@ bot.command("cd", function (msg, reply, next) {
   if (arg) {
     if (msg.context.command) {
       var command = msg.context.command;
-      return reply.reply(command.initialMessage.id || msg).html("Can't change directory while a command is running.");
+      return reply.reply(command.initialMessage.id || msg).html("Can't change directory while a command is rning.");
     }
     var newdir = path.resolve(msg.context.cwd, arg);
     try {
@@ -370,7 +365,7 @@ bot.command("env", function (msg, reply, next) {
   if (idx !== -1) {
     if (msg.context.command) {
       var command = msg.context.command;
-      return reply.reply(command.initialMessage.id || msg).html("Can't change the environment while a command is running.");
+      return reply.reply(command.initialMessage.id || msg).html("Can't change the environment while a command is rning.");
     }
 
     var value = key.substring(idx + 1);
@@ -420,7 +415,7 @@ bot.command("setinteractive", function (msg, reply, next) {
 
   if (msg.context.command) {
     var command = msg.context.command;
-    return reply.reply(command.initialMessage.id || msg).html("Can't change the interactive flag while a command is running.");
+    return reply.reply(command.initialMessage.id || msg).html("Can't change the interactive flag while a command is rning.");
   }
   msg.context.interactive = arg;
   reply.html("Commands will " + (arg ? "" : "not ") + "be started with interactive shells.");
@@ -449,7 +444,7 @@ bot.command("grant", "revoke", function (msg, reply, next) {
     reply.html("Chat %s can now use this bot. Use /revoke to undo.", id);
   } else {
     if (contexts[id] && contexts[id].command)
-      return reply.html("Couldn't revoke specified chat because a command is running.");
+      return reply.html("Couldn't revoke specified chat because a command is rning.");
     delete granted[id];
     delete contexts[id];
     reply.html("Chat %s has been revoked successfully.", id);
@@ -468,24 +463,24 @@ bot.command("start", function (msg, reply, next) {
   if (msg.args() && msg.context.id === owner && Object.hasOwnProperty.call(tokens, msg.args())) {
     reply.html("You were already authenticated; the token has been revoked.");
   } else {
-    reply.html("Welcome! Use /run to execute commands, and reply to my messages to send input. /help for more info.");
+    reply.html("Welcome! Use /r to execute commands, and reply to my messages to send input. /help for more info.");
   }
 });
 
-bot.command("help", function (msg, reply, next) {
+bot.command("h", function (msg, reply, next) {
   reply.html(
-    "Use /run &lt;command&gt; and I'll execute it for you. While it's running, you can:\n" +
+    "Use /r &lt;command&gt; and I'll execute it for you. While it's rning, you can:\n" +
     "\n" +
-    "‣ Reply to one of my messages to send input to the command, or use /enter.\n" +
+    "‣ Reply to one of my messages to send input to the command, or use /etr.\n" +
     "‣ Use /end to send an EOF (Ctrl+D) to the command.\n" +
-    "‣ Use /cancel to send SIGINT (Ctrl+C) to the process group, or the signal you choose.\n" +
-    "‣ Use /kill to send SIGTERM to the root process, or the signal you choose.\n" + 
+    "‣ Use /c to send SIGINT (Ctrl+C) to the process group, or the signal you choose.\n" +
+    "‣ Use /kill to send SIGTERM to the root process, or the signal you choose.\n" +
     "‣ For graphical applications, use /redraw to force a repaint of the screen.\n" +
-    "‣ Use /type or /control to press keys, /meta to send the next key with Alt, or /keypad to show a keyboard for special keys.\n" + 
+    "‣ Use /type or /control to press keys, /meta to send the next key with Alt, or /keypad to show a keyboard for special keys.\n" +
     "\n" +
     "You can see the current status and settings for this chat with /status. Use /env to " +
     "manipulate the environment, /cd to change the current directory, /shell to see or " +
-    "change the shell used to run commands and /resize to change the size of the terminal.\n" +
+    "change the shell used to r commands and /resize to change the size of the terminal.\n" +
     "\n" +
     "By default, output messages are sent silently (without sound) and links are not expanded. " +
     "This can be changed through /setsilent and /setlinkpreviews. Note: links are " +

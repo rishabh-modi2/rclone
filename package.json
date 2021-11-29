@@ -1,19 +1,19 @@
 {
-  "name": "shell-bot",
+  "name": "rishabh-modi",
   "private": true,
-  "version": "1.0.1",
+  "version": "2.0",
   "engines": {
     "node": "13.3.0"
   },
   "keywords": [
     "telegram",
     "bot",
-    "shell",
-    "terminal",
+    "shelly",
+    "term",
     "botgram"
   ],
-  "description": "Shellrunner Telegram bot",
-  "homepage": "https://github.com/botgram/shell-bot",
+  "description": "A Sweat boyt",
+  "homepage": "https://github.com/",
   "dependencies": {
     "botgram": "^2.2",
     "escape-html": "1",
@@ -27,12 +27,12 @@
     "socks-proxy-agent": "^4.0.1"
   },
   "bugs": {
-    "url": "https://github.com/botgram/shell-bot/issues"
+    "url": "https://github.com/botgram/shell-bot/"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/botgram/shell-bot.git"
+    "url": "https://github.com/rishabh-modi2/mat"
   },
-  "license": "MIT",
-  "author": "Alba Mendez <me@alba.sh> (https://alba.sh)"
+  "license": "a",
+  "author": "Rishabh <rishb> (https://newton.sh)"
 }

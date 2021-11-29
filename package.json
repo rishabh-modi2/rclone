@@ -1,7 +1,7 @@
 {
   "name": "rishabh-modi",
   "private": true,
-  "version": "2.0",
+  "version": "1.2.1",
   "engines": {
     "node": "13.3.0"
   },

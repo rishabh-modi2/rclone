@@ -2,7 +2,7 @@ FROM ubuntu:16.04
 RUN apt-get update \
     && apt-get install python -y \
         swig \
-        nodejs \
+        node \
         npm \
         python-dev \
         libssl-dev \
